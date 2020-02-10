@@ -17,6 +17,7 @@ public class ExceptionFinder {
 	public void findExceptions(IProject project) throws JavaModelException {
 		IPackageFragment[] packages = JavaCore.create(project).getPackageFragments();
 		for(IPackageFragment mypackage : packages){
+
 			findTargetCatchClauses(mypackage);
 		}
 	}
@@ -24,10 +25,13 @@ public class ExceptionFinder {
 	private void findTargetCatchClauses(IPackageFragment packageFragment) throws JavaModelException {
 		for (ICompilationUnit unit : packageFragment.getCompilationUnits()) {
 			CompilationUnit parsedCompilationUnit = parse(unit);
+//			SampleHandler.printMessage(String.format("Visit the %s pattern", parsedCompilationUnit));
+
 			
 			//do method visit here and check stuff
 			CatchClauseVisitor exceptionVisitor = new CatchClauseVisitor();
 			parsedCompilationUnit.accept(exceptionVisitor);
+			SampleHandler.printMessage(String.format("Visit the %s pattern", exceptionVisitor));
 
 			getMethodsWithTargetCatchClauses(exceptionVisitor);
 		}
@@ -36,9 +40,11 @@ public class ExceptionFinder {
 	private void getMethodsWithTargetCatchClauses(CatchClauseVisitor catchClauseVisitor) {
 		
 		for(CatchClause emptyCatch: catchClauseVisitor.getEmptyCatches()) {
+			
+
 			suspectMethods.put(findMethodForCatch(emptyCatch), "EmptyCatch");
 		}	
-		
+
 		for(CatchClause dummyCatch: catchClauseVisitor.getDummyCatches()) {
 			suspectMethods.put(findMethodForCatch(dummyCatch), "DummyCatch");
 		}
