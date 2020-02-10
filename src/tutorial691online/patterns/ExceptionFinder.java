@@ -25,14 +25,9 @@ public class ExceptionFinder {
 	private void findTargetCatchClauses(IPackageFragment packageFragment) throws JavaModelException {
 		for (ICompilationUnit unit : packageFragment.getCompilationUnits()) {
 			CompilationUnit parsedCompilationUnit = parse(unit);
-//			SampleHandler.printMessage(String.format("Visit the %s pattern", parsedCompilationUnit));
-
-			
 			//do method visit here and check stuff
 			CatchClauseVisitor exceptionVisitor = new CatchClauseVisitor();
 			parsedCompilationUnit.accept(exceptionVisitor);
-			SampleHandler.printMessage(String.format("Visit the %s pattern", exceptionVisitor));
-
 			getMethodsWithTargetCatchClauses(exceptionVisitor);
 		}
 	}

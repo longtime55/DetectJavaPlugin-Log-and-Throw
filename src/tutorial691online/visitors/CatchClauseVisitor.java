@@ -14,17 +14,12 @@ public class CatchClauseVisitor extends ASTVisitor{
 	
 	@Override
 	public boolean visit(CatchClause node) {
-		SampleHandler.printMessage(String.format("Visit the %s pattern", node));
-		
 		MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor("LogCatchSwitch");
 		node.accept(methodInvocationVisitor);
 		
 		if(isEmptyException(node)) {
 			emptyCatches.add(node);
 		}
-//		SampleHandler.printMessage(String.format("11dsaffrom the %s pattern", node.getBody().statements().size()));
-//		SampleHandler.printMessage(String.format("22dsaffrom the %s pattern", methodInvocationVisitor.getLogPrintDefaultStatements()));
-//		SampleHandler.printMessage(String.format(" the %s pattern", node.getBody().statements()));
 		if(node.getBody().statements().size() >= methodInvocationVisitor.getLogPrintDefaultStatements() && !emptyCatches.contains(node)){
 			
 			dummyCatches.add(node);
